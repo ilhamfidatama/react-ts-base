@@ -1,25 +1,37 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
+import {onRequest, onFailure, onSuccess} from './api/config/listenerType';
+import {getUsers} from './api/users';
 import logo from './logo.svg';
 import './App.css';
 
-function App() {
+const App = () => {
+  const loading = useSelector((state: any) => state.loading);
+  const success = useSelector((state: any) => state.success);
+  const failure = useSelector((state: any) => state.failure);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      dispatch(onRequest());
+      try{
+        const response = await getUsers();
+        dispatch(onSuccess(response));
+      } catch (error){
+        console.log(error);
+        dispatch(onFailure(""));
+      }
+    }
+
+    fetchData();
+  }, [dispatch]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <>
+    <div>
+      <h1>React TS Base Project</h1>
     </div>
+    </>
   );
 }
 
