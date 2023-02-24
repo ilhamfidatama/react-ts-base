@@ -1,18 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import axios from "./api/config";
+import {getUsers} from "./api/usersFetch";
 
 function App() {
   
   useEffect(() => {
-    axios.get("/users")
-      .then((response: any) => {
-        console.log(response.data);
-      })
-      .catch((e: Error) => {
-        console.log(e);
-      })
+    getUsers();
   }, []);
 
   return (
