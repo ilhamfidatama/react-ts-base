@@ -1,30 +1,31 @@
-import React, { useEffect, useState } from 'react';
+import React, {useState} from 'react';
 import logo from './logo.svg';
 import './App.css';
-import {getUsers} from "./api/usersFetch";
+import axios from './api/config';
+import useAsync from './api/useAsync';
+import {Users} from './data/usersResponse';
 
 function App() {
-  
-  useEffect(() => {
-    getUsers();
-  }, []);
+  const [refresh, setRefresh] = useState(false);
+  const {loading, error, value} = useAsync<Array<Users>>(() => {
+    return new Promise((resolve, reject) => {
+      axios.get('/users')
+      .then(response => {
+        console.log(response.data);
+        resolve(response.data as Array<Users>);
+      })
+      .catch(error => {
+        console.log(error);
+        reject(error);
+      });
+    });
+  }, [refresh]);
 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {loading && <p>Loading...</p>}
+      {error && <p>{error.message}</p>}
+      {value && value.map(user => (<p>{user.name}</p>))}
     </div>
   );
 }

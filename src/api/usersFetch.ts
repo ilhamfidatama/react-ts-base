@@ -5,11 +5,30 @@ import {Response} from '../data/baseResponse';
 const path: string = "/users";
 
 export const getUsers = async () => {
-    axios.get<Array<Users>>(path)
+    await axios.get<Array<Users>>(path)
         .then((response: any) => {
-            console.log(response);
+            if (response.status === 200) {
+                console.log(response);
+                return {
+                    data: response.data,
+                    loading: false,
+                    status: response.status,
+                };
+            } else {
+                return {
+                    loading: false,
+                    data: null,
+                    status: response.status,
+                    message: response.statusText
+                }
+            }
         })
         .catch((err: Error) => {
-            console.log(err);
+            return {
+                loading: false,
+                data: null,
+                status: 403,
+                message: err.message
+            }
         })
 }

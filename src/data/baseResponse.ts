@@ -1,6 +1,6 @@
-export interface Response {
+export interface Response<T> {
     loading: boolean,
-    data: any,
+    data: T,
     status: number,
-    message: string
+    message?: string
 }
