@@ -4,6 +4,7 @@ import './App.css';
 import axios from './api/config';
 import useAsync from './api/useAsync';
 import {Users} from './data/usersResponse';
+import Home from './view/pages/home';
 
 function App() {
   const [refresh, setRefresh] = useState(false);
@@ -22,11 +23,7 @@ function App() {
   }, [refresh]);
 
   return (
-    <div className="App">
-      {loading && <p>Loading...</p>}
-      {error && <p>{error.message}</p>}
-      {value && value.map(user => (<p>{user.name}</p>))}
-    </div>
+    <Home />
   );
 }
 
